@@ -12,6 +12,7 @@ let gridBoxes = [];
 let enemyShipsSunk = 0;
 let playersTurn = true;
 let gameStarted = false;
+let playerShipBeingPlaced = 0;
 window.gridBoxes = gridBoxes;
 window.enemyShips = enemyShips;
 
@@ -56,11 +57,16 @@ function CreatePlayerGrid() {
       gridBox.setAttribute("id", `gridX${x}Y${y}`);
       gridBox.classList.add("grid-box");
       gridBox.setAttribute("onclick", `Clicked(this, ${x}, ${y})`);
+      gridBox.setAttribute("onmouseover", `MouseOver(this, ${x}, ${y})`);
+      gridBox.setAttribute("onmouseout", `MouseOut(this, ${x}, ${y})`);
       playerGrid.insertBefore(gridBox, playerGrid.children[0]);
       gridBoxes.push(new gridBoxConstructor(`${x}`, `${y}`, "player"));
     }
   }
 }
+
+
+
 // Simple GRID generation
 function CreateEnemyGrid() {
   for (let y = 0; y < gridSize.y; y++) {
@@ -74,6 +80,20 @@ function CreateEnemyGrid() {
     }
   }
 }
+
+
+
+// CONTROL MOUSEOVER WHEN SETTING UP PLAYER SHIPS
+function MouseOver(el, x, y) {
+  el.classList.add('placing');
+}
+window.MouseOver = MouseOver;
+
+// CONTROL MOUSEOUT WHEN SETTING UP PLAYER SHIPS
+function MouseOut(el, x, y){
+  el.classList.remove('placing');
+}
+window.MouseOut = MouseOut;
 // create random INT controller
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -83,6 +103,7 @@ function SetupGame(){
     PlacePlayerShipsController();
 }
 function PlacePlayerShipsController(){
+
     window.Clicked = (el, x, y) => {
         if (
           gridBoxes.find((val) => {
